@@ -1,0 +1,23 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.links {
+  display: flex;          /* makes items horizontal */
+  gap: 20px;              /* space between links */
+  list-style: none;       /* removes bullets */
+  margin: 0;
+  padding: 0;
+}
+
+.links li {
+  display: inline-block;
+}
+
+/* optional: push links to the right */
+.links {
+  margin-left: auto;
+}

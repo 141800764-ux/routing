@@ -1,0 +1,20 @@
+<svg width="320" height="100" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Background (optional) -->
+  <rect width="320" height="100" rx="15" fill="white"></rect>
+
+  <!-- Icon -->
+  <g transform="translate(10,15)">
+    <path d="M20 10 H60 L50 30 H70 L30 70 H45 L25 90 H0 L20 50 H0 Z" fill="#1E90FF"></path>
+  </g>
+
+  <!-- Text -->
+  <text x="90" y="55" font-family="Arial, sans-serif" font-size="36" font-weight="bold">
+    <tspan fill="#0A1F44">Dev</tspan>
+    <tspan fill="#1E90FF">Flow</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="90" y="80" font-family="Arial, sans-serif" font-size="10" fill="#1E90FF" letter-spacing="2">
+    BUILD • INNOVATE • FLOW
+  </text>
+</svg>
