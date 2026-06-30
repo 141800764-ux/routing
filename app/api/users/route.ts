@@ -8,15 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("=== /api/users GET called ===");
-    console.log("MONGODB_URI:", process.env.MONGODB_URI ? "✅" : "❌ missing");
-    console.log("DATABASE_URL:", process.env.DATABASE_URL ? "✅" : "❌ missing");
-
     await dbConnect();
-    console.log("✅ dbConnect OK");
-
-    const prismaTest = await prisma.user.findFirst();
-    console.log("✅ Prisma OK:", prismaTest ? "found user" : "no users yet");
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("query") || "";
@@ -98,7 +90,7 @@ export async function GET(request: NextRequest) {
       isNext,
     });
   } catch (error) {
-    return handleError(error);
+    return handleError(error) as unknown as Response;
   }
 }
 
@@ -123,10 +115,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "User already exists",
-        },
+        { success: false, message: "User already exists" },
         { status: 409 }
       );
     }
@@ -139,14 +128,10 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "User created successfully",
-        user,
-      },
+      { success: true, message: "User created successfully", user },
       { status: 201 }
     );
   } catch (error) {
-    return handleError(error);
+    return handleError(error) as unknown as Response;
   }
 }
