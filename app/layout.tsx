@@ -10,6 +10,8 @@ import Navbar from "@/components/navigation/Navbar";
 import RightSideBar from "@/components/navigation/navbar/RightSideBar";
 import RootProviders from "@/components/providers/root-providers";
 
+export const dynamic = "force-dynamic";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
