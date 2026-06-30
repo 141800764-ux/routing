@@ -1,5 +1,8 @@
 import Link from "next/link"
 import styles from "./projects.module.css"
+
+export const dynamic = "force-dynamic";
+
 export default function ProjectPage() {
   return (
     <main>
