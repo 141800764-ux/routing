@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import MobileNavigation from "./MobileNavigation";
 
 const Navbar = () => {
   return (
@@ -20,22 +21,25 @@ const Navbar = () => {
         </p>
       </Link>
 
-      {/* CENTER - LINKS (THIS WAS MISSING) */}
+      {/* CENTER LINKS */}
       <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700 dark:text-gray-300">
         <Link href="/">Home</Link>
         <Link href="/about">About</Link>
         <Link href="/contact">Contact</Link>
       </div>
 
-      {/* RIGHT - ACTIONS */}
+      {/* RIGHT SIDE */}
       <div className="flex items-center gap-5">
-        <p className="text-sm text-gray-600 dark:text-gray-300">
+        <p className="text-sm text-gray-600 dark:text-gray-300 max-md:hidden">
           Global Search
         </p>
 
-        <button className="px-3 py-1 rounded-md bg-gray-200 dark:bg-gray-700 text-sm">
+        <button className="px-3 py-1 rounded-md bg-gray-200 dark:bg-gray-700 text-sm max-md:hidden">
           Theme
         </button>
+
+        {/* MOBILE NAV */}
+        <MobileNavigation />
       </div>
 
     </nav>

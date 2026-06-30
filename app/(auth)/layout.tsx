@@ -1,6 +1,10 @@
 import React from "react";
 
-export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-auth-light dark:bg-auth-dark bg-cover bg-center px-4 py-10">
 
@@ -12,6 +16,4 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 
     </main>
   );
-};
-
-export default AuthLayout;
+}

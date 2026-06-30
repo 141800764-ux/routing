@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+////////////////////////////////////////
+// 🔐 AUTH MODELS
+////////////////////////////////////////
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String?   @unique
+  email         String    @unique
+  password      String?
+  image         String?
+  emailVerified DateTime?
+
+  accounts         Account[]
+  sessions         Session[]
+  questions        Question[]
+  answers          Answer[]
+  comments         Comment[]
+  questionComments QuestionComment[]
+  questionVotes    QuestionVote[]
+  answerVotes      AnswerVote[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+////////////////////////////////////////
+// ❓ QUESTION SYSTEM
+////////////////////////////////////////
+
+model Question {
+  id      String @id @default(cuid())
+  title   String
+  content String
+  slug    String @unique
+
+  likes Int @default(0)
+  views Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tags             QuestionTag[]
+  answers          Answer[]
+  questionComments QuestionComment[]
+  votes            QuestionVote[]
+}
+
+////////////////////////////////////////
+// 💬 ANSWER SYSTEM
+////////////////////////////////////////
+
+model Answer {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  comments Comment[]
+  votes    AnswerVote[]
+}
+
+////////////////////////////////////////
+// 🗨 COMMENT SYSTEM (on answers)
+////////////////////////////////////////
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  answerId String
+  answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+}
+
+////////////////////////////////////////
+// 🗨 QUESTION COMMENT SYSTEM (on questions)
+////////////////////////////////////////
+
+model QuestionComment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+////////////////////////////////////////
+// 🏷 TAG SYSTEM
+////////////////////////////////////////
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  questions QuestionTag[]
+}
+
+////////////////////////////////////////
+// 🔗 MANY-TO-MANY RELATION
+////////////////////////////////////////
+
+model QuestionTag {
+  questionId String
+  tagId      String
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, tagId])
+}
+
+////////////////////////////////////////
+// 👍 VOTE SYSTEM
+////////////////////////////////////////
+
+model QuestionVote {
+  id        String   @id @default(cuid())
+  voteType  String
+  createdAt DateTime @default(now())
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+}
+
+model AnswerVote {
+  id        String   @id @default(cuid())
+  voteType  String
+  createdAt DateTime @default(now())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  answerId String
+  answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, answerId])
+}

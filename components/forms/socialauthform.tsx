@@ -1,59 +1,66 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
-import { Button } from "../ui/button";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 
-const SocialAuthForm = () => {
+type Props = {
+  type?: "sign-in" | "sign-up";
+};
+
+const SocialAuthForm = ({ type = "sign-in" }: Props) => {
+  const [loadingProvider, setLoadingProvider] = useState<
+    "github" | "google" | null
+  >(null);
+
   const handleSignIn = async (provider: "github" | "google") => {
     try {
+      setLoadingProvider(provider);
+
       await signIn(provider, {
         callbackUrl: "/dashboard",
       });
     } catch (error) {
-      console.log(error);
-
-      toast({
-        title: "Sign in failed",
-        description:
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred.",
-        variant: "destructive",
-      });
+      console.error(error);
+    } finally {
+      setLoadingProvider(null);
     }
   };
 
   return (
     <div className="mt-8 flex w-full gap-3">
-      {/* GITHUB */}
+
       <Button
+        type="button"
         onClick={() => handleSignIn("github")}
-        className="flex w-1/2 items-center justify-center gap-2 background-dark400_light900"
+        disabled={!!loadingProvider}
+        className="flex w-1/2 items-center justify-center gap-2 bg-white text-black"
       >
-        <Image
-          src="/images/github.svg"
-          alt="Github Logo"
-          width={20}
-          height={20}
-        />
-        <span>Login with GitHub</span>
+        <Image src="/images/github.svg" alt="GitHub" width={20} height={20} />
+
+        {loadingProvider === "github"
+          ? "Connecting..."
+          : type === "sign-in"
+          ? "GitHub"
+          : "GitHub"}
       </Button>
 
-      {/* GOOGLE */}
       <Button
+        type="button"
         onClick={() => handleSignIn("google")}
-        className="flex w-1/2 items-center justify-center gap-2 background-dark400_light900"
+        disabled={!!loadingProvider}
+        className="flex w-1/2 items-center justify-center gap-2 bg-white text-black"
       >
-        <Image
-          src="/images/google.svg"
-          alt="Google Logo"
-          width={20}
-          height={20}
-        />
-        <span>Login with Google</span>
+        <Image src="/images/google.svg" alt="Google" width={20} height={20} />
+
+        {loadingProvider === "google"
+          ? "Connecting..."
+          : type === "sign-in"
+          ? "Google"
+          : "Google"}
       </Button>
+
     </div>
   );
 };

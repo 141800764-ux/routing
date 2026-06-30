@@ -1,12 +1,20 @@
-import React from 'react'
-import Navbar from "@/../components/navigation/navbar";
+import React from "react";
+import Navbar from "@/components/navigation/Navbar";
 
-export const Rootlayout = ({children}:{children: React.ReactNode}) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <main>
+    <main className="background-light850_dark100">
       <Navbar />
-      {children}
+
+      <div className="flex">
+        <div className="flex-1">
+          {children}
+        </div>
+      </div>
     </main>
   );
-};
-export default Rootlayout;
+}
