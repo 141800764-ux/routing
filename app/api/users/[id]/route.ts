@@ -5,7 +5,6 @@ import handleError from "@/lib/handlers/error";
 import { NotFoundError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 
-// GET /api/users/[id]
 export async function GET(
   _: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -21,16 +20,12 @@ export async function GET(
 
     if (!user) throw new NotFoundError("User");
 
-    return NextResponse.json(
-      { success: true, data: user },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as unknown as Response;
   }
 }
 
-// DELETE /api/users/[id]
 export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -46,16 +41,12 @@ export async function DELETE(
 
     if (!user) throw new NotFoundError("User");
 
-    return NextResponse.json(
-      { success: true, data: user },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as unknown as Response;
   }
 }
 
-// PUT /api/users/[id]
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -69,17 +60,12 @@ export async function PUT(
 
     const body = await request.json();
 
-    const updatedUser = await User.findByIdAndUpdate(id, body, {
-      new: true,
-    });
+    const updatedUser = await User.findByIdAndUpdate(id, body, { new: true });
 
     if (!updatedUser) throw new NotFoundError("User");
 
-    return NextResponse.json(
-      { success: true, data: updatedUser },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, data: updatedUser }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as unknown as Response;
   }
 }
